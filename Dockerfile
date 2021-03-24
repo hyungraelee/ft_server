@@ -1,9 +1,5 @@
 FROM	debian:buster
 
-ARG		WP_NAME=wordpress
-ARG		WP_USER=hyunlee
-ARG		WP_PWD=1234
-
 COPY	./srcs/* ./
 
 RUN		apt update -y
@@ -21,16 +17,15 @@ RUN		wget https://files.phpmyadmin.net/phpMyAdmin/5.1.0/phpMyAdmin-5.1.0-all-lan
 	mv phpMyAdmin-5.1.0-all-languages phpmyadmin; \
 	mv phpmyadmin /var/www/html/; \
 	service mysql start; \
-	mysql -e  "CREATE DATABASE ${WP_NAME}; \
-	USE ${WP_NAME}; \
-	CREATE USER '${WP_USER}'@'localhost' IDENTIFIED BY '${WP_PWD}'; \
-	GRANT ALL PRIVILEGES ON ${WP_NAME}.* TO '${WP_USER}'@'localhost' WITH GRANT OPTION; \
+	mysql -e  "CREATE DATABASE wordpress; \
+	USE wordpress; \
+	CREATE USER 'hyunlee'@'localhost' IDENTIFIED BY '1234'; \
+	GRANT ALL PRIVILEGES ON wordpress.* TO 'hyunlee'@'localhost' WITH GRANT OPTION; \
 	FLUSH PRIVILEGES;"; \
 	cp -rp /config.inc.php var/www/html/phpmyadmin/
 
 
-RUN		wget https://wordpress.org/latest.tar.gz; \
-	tar -xvf latest.tar.gz; \
+RUN	tar -xvf latest.tar.gz; \
 	mv wordpress/ var/www/html/; \
 	chown -R www-data:www-data /var/www/html/wordpress; \
 	cp -rp /wp-config.php var/www/html/wordpress/
